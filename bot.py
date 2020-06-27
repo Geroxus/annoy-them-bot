@@ -1,4 +1,5 @@
 import discord
+import random
 from os import makedirs, listdir
 
 bot_token_file = open('./discord-bot-token', 'tr')
@@ -41,7 +42,17 @@ async def on_message(message):
         f.close()
 
         if message.author.id == tid:
-            await message.channel.send('Hey {}! How are you doing?'.format(message.author.mention))
+            f = open('./{}/log'.format(message.guild.id), 'ta')
+            f.write('{}: {}\n'.format(message.author, message.content))
+            if random.randrange(0, 100) <= 20:
+                reply_list = ['Hey {}! How are you doing?'.format(message.author.mention), 'Ain\'t the weather '
+                              'just splendid, {}?'.format(message.author.mention), 'Oh ... \n it\'s you again '
+                              '{}'.format(message.author.mention), 'Just leave me alone already {}!'.format(message.
+                              author.mention)]
+                reply = random.choice(reply_list)
+                f.write('\treplied with {}\n'.format(reply))
+                await message.channel.send(reply)
+            f.close()
 
 
 client.run(BOT_TOKEN)
